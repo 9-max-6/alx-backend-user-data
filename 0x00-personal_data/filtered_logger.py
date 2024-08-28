@@ -1,9 +1,21 @@
 #!/usr/bin/env python3
 """module: function: filter_datum"""
 import re
+import sys
 import logging
-from typing import List
+import os
+import mysql.connector
+from mysql.connector import errorcode
+from typing import List, Tuple
 
+
+PII_FIELDS: Tuple = (
+    "email",
+    "phone",
+    "ssn",
+    "password",
+    "ip",
+)
 
 def filter_datum(
         fields: List[str],
@@ -48,3 +60,32 @@ class RedactingFormatter(logging.Formatter):
             original_message,
             self.SEPARATOR
             )
+
+def get_logger() -> logging.Logger:
+    """a function to return a logging.Logger object"""
+    logger = logging.getLogger('user_data')
+    logger.setLevel(logging.INFO)
+    logger.propagate = False
+    stream_handler = logging.StreamHandler(sys.stdout)
+    stream_handler.setFormatter(RedactingFormatter)
+    logger.addHandler(stream_handler)
+
+    return logger
+
+def get_db() -> mysql.connector.connection.MySQLConnection:
+    """A function to return a DB connector"""
+    try:
+        cnx = mysql.connector.connect(
+            user=os.getenv('PERSONAL_DATA_DB_USERNAME', "root"),
+            password=os.getenv('PERSONAL_DATA_DB_PASSWORD', ""),
+            host=os.getenv('PERSONAL_DATA_DB_HOST', 'localhost'),
+            database=os.getenv('PERSONAL_DATA_DB_NAME')
+            )
+        return cnx
+    except mysql.connector.Error as err:
+        if err.errno == errorcode.ER_ACCESS_DENIED_ERROR:
+            print("Something is wrong with your user name or password")
+        elif err.errno == errorcode.ER_BAD_DB_ERROR:
+            print("Database does not exist")
+        else:
+            print(err)
