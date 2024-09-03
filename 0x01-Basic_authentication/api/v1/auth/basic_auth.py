@@ -2,6 +2,7 @@
 """Basic auth module"""
 import base64
 import binascii
+from typing import Tuple
 from api.v1.auth.auth import Auth
 
 
@@ -37,3 +38,26 @@ class BasicAuth(Auth):
             return decoded_data.decode('utf-8')
         except binascii.Error as e:
             return None
+
+    def extract_user_credentials(
+            self,
+            decoded_base64_authorization_header: str
+            ) -> Tuple[str, str]:
+        """A function to extract the user credentials"""
+        delimeter = ":"
+        user_email = ""
+        user_password = ""
+        split_string = []
+
+        if not decoded_base64_authorization_header:
+            return None
+        if type(decoded_base64_authorization_header) is not str:
+            return None
+
+        if delimeter not in decoded_base64_authorization_header:
+            return None
+
+        split_string = decoded_base64_authorization_header.split(delimeter)
+        user_email, user_password = split_string
+
+        return (user_email, user_password)
