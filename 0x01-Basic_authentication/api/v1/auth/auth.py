@@ -53,8 +53,6 @@ class BasicAuth(Auth):
         if not isinstance(authorization_header, str):
             return None
         prefix = 'Basic '
-        if not authorization_header.startswith(
-            prefix
-            ):
+        if not authorization_header.startswith(prefix):
             return None
         return authorization_header[len(prefix):]
