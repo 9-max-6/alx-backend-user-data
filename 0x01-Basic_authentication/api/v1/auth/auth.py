@@ -14,16 +14,22 @@ class Auth:
             return True
         if len(excluded_paths) == 0 or not excluded_paths:
             return True
-        if path[-1] != '/':
-            path = path + '/'
-        if path in excluded_paths:
+
+        trimmed_paths = []
+        for pathe in excluded_paths:
+            if not pathe.endswith('/'):
+                pathe += '/'
+            trimmed_paths.append(pathe)
+
+        if not path.endswith('/'):
+            path += '/'
+
+        if path in trimmed_paths:
             return False
-        else:
-            return True
+        return True
 
     def authorization_header(self, request=None) -> str:
         """returns None"""
-
         return None
 
     def current_user(self, request=None) -> TypeVar('User'):
