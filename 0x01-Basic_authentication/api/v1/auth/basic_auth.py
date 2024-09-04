@@ -4,6 +4,7 @@ import base64
 import binascii
 from typing import Tuple
 from api.v1.auth.auth import Auth
+from models.user import User
 
 
 class BasicAuth(Auth):
@@ -61,3 +62,29 @@ class BasicAuth(Auth):
         user_email, user_password = split_string
 
         return (user_email, user_password)
+
+    def user_object_from_credentials(
+            self,
+            user_email: str,
+            user_pwd: str
+            ) -> TypeVar('User'):
+        """
+        Fetch user instance
+        This function returns the User instance based on the email and password
+        Parameters:
+        user_email(str) - the email of the user to lookup
+        user_pwd(str) - the password of the user to lookup
+
+        Returns:None if the user_email or user_pwd is None
+                None if the database doesn't contain a User with that email
+                None if the password is invalid
+                The User is authentication was successful.
+        """
+
+        if not user_email or not user_pwd:
+            return None
+
+        check_user =  User.search({"email": user_email})
+        if not check_user:
+            return None
+        if user.is_valid_password(user_pwd):
