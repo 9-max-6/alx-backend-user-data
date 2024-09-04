@@ -2,7 +2,7 @@
 """Basic auth module"""
 import base64
 import binascii
-from typing import Tuple
+from typing import Tuple, TypeVar
 from api.v1.auth.auth import Auth
 from models.user import User
 
