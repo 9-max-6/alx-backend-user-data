@@ -81,10 +81,13 @@ class BasicAuth(Auth):
                 The User is authentication was successful.
         """
 
-        if not user_email or not user_pwd:
-            return None
-
-        check_user =  User.search({"email": user_email})
-        if not check_user:
-            return None
-        if user.is_valid_password(user_pwd):
+        if type(user_email) == str and type(user_pwd) == str:
+            try:
+                users = User.search({'email': user_email})
+            except Exception:
+                return None
+            if len(users) <= 0:
+                return None
+            if users[0].is_valid_password(user_pwd):
+                return users[0]
+        return None
