@@ -85,7 +85,7 @@ class BasicAuth(Auth):
                 The User is authentication was successful.
         """
 
-        if type(user_email) == str and type(user_pwd) == str:
+        if isinstance(user_email, str) and isinstance(user_pwd, str):
             try:
                 users = User.search({'email': user_email})
             except Exception:
