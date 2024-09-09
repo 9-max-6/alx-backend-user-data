@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Session authentication logic"""
 import uuid
+from models.user import User
 from api.v1.auth.auth import Auth
 
 
@@ -30,3 +31,12 @@ class SessionAuth(Auth):
         return self.user_id_by_session_id.get(
             session_id
         )
+
+    def current_user(self, request=None):
+        """a function that returns the user based on the
+        cookie value"""
+        session_cookie = self.session_cookie(request)
+        if session_cookie:
+            user_id = self.user_id_for_session_id(session_cookie)
+            user = User.get(user_id)
+            return user
