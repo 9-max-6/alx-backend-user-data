@@ -1,36 +1,17 @@
-#!/usr/bin/env python3
-""" Main 5
+#!/usr/bin/python3
+""" Check response
 """
-import uuid
-from api.v1.auth.basic_auth import BasicAuth
-from models.user import User
 
-""" Create a user test """
-user_email = str(uuid.uuid4())
-user_clear_pwd = str(uuid.uuid4())
-user = User()
-user.email = user_email
-user.first_name = "Bob"
-user.last_name = "Dylan"
-user.password = user_clear_pwd
-print("New user: {}".format(user.display_name()))
-user.save()
+if __name__ == "__main__":
+    from api.v1.auth.basic_auth import BasicAuth
 
-""" Retreive this user via the class BasicAuth """
-
-a = BasicAuth()
-
-u = a.user_object_from_credentials(None, None)
-print(u.display_name() if u is not None else "None")
-
-u = a.user_object_from_credentials(89, 98)
-print(u.display_name() if u is not None else "None")
-
-u = a.user_object_from_credentials("email@notfound.com", "pwd")
-print(u.display_name() if u is not None else "None")
-
-u = a.user_object_from_credentials(user_email, "pwd")
-print(u.display_name() if u is not None else "None")
-
-u = a.user_object_from_credentials(user_email, user_clear_pwd)
-print(u.display_name() if u is not None else "None")
+    ba = BasicAuth()
+    res1, res2 = ba.extract_user_credentials("Holberton")
+    if res1 is not None:
+        print("extract_user_credentials must return None, None if 'decoded_base64_authorization_header' doesn't contain ':'")
+        exit(1)
+    if res2 is not None:
+        print("extract_user_credentials must return None, None if 'decoded_base64_authorization_header' doesn't contain ':'")
+        exit(1)
+    
+    print("OK", end="")

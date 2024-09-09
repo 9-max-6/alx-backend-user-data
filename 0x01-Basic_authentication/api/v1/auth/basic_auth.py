@@ -51,12 +51,12 @@ class BasicAuth(Auth):
         split_string = []
 
         if not decoded_base64_authorization_header:
-            return None
+            return (None, None)
         if type(decoded_base64_authorization_header) is not str:
-            return None
+            return (None, None)
 
         if delimeter not in decoded_base64_authorization_header:
-            return None
+            return (None, None)
 
         split_string = decoded_base64_authorization_header.split(delimeter)
         user_email, user_password = split_string
