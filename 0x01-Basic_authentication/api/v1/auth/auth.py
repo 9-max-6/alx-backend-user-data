@@ -22,7 +22,7 @@ class Auth:
                 if not pathe.endswith('*'):
                     pathe += '/'
             trimmed_paths.append(pathe)
-            
+
             if pathe.endswith('*'):
                 paths_with_asterisk.append(pathe)
 
@@ -31,7 +31,7 @@ class Auth:
 
         if path in trimmed_paths:
             return False
-        
+
         if len(paths_with_asterisk) == 0:
             return True
 
