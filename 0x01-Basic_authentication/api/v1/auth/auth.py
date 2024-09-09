@@ -39,7 +39,7 @@ class Auth:
         for pathh in paths_with_asterisk:
             if path[:len(pathh) - 1] in pathh:
                 found = True
-        return found
+        return not found
 
     def authorization_header(self, request=None) -> str:
         """returns None"""
