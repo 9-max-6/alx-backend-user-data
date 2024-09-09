@@ -12,7 +12,7 @@ class Auth:
         """a function that returns False"""
         if not path:
             return True
-        if len(excluded_paths) == 0 or not excluded_paths:
+        if not excluded_paths or len(excluded_paths) == 0:
             return True
 
         trimmed_paths = []
