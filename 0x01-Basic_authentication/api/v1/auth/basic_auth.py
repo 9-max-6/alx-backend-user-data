@@ -59,7 +59,11 @@ class BasicAuth(Auth):
             return (None, None)
 
         split_string = decoded_base64_authorization_header.split(delimeter)
-        user_email, user_password = split_string
+        if len(split_string) > 2:
+            user_email = split_string[0]
+            user_password = "".join(split_string[1:])
+        else:
+            user_email, user_password = split_string
 
         return (user_email, user_password)
 
