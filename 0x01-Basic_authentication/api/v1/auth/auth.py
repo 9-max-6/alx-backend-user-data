@@ -16,17 +16,30 @@ class Auth:
             return True
 
         trimmed_paths = []
+        paths_with_asterisk = []
         for pathe in excluded_paths:
             if not pathe.endswith('/'):
-                pathe += '/'
+                if not pathe.endswith('*'):
+                    pathe += '/'
             trimmed_paths.append(pathe)
+            
+            if pathe.endswith('*'):
+                paths_with_asterisk.append(pathe)
 
         if not path.endswith('/'):
             path += '/'
 
         if path in trimmed_paths:
             return False
-        return True
+        
+        if len(paths_with_asterisk) == 0:
+            return True
+
+        found = False
+        for pathh in paths_with_asterisk:
+            if path[:len(pathh) - 1] in pathh:
+                found = True
+        return found
 
     def authorization_header(self, request=None) -> str:
         """returns None"""
