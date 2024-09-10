@@ -1,35 +1,27 @@
-#!/usr/bin/env python3
-""" Main 4
+#!/usr/bin/python3
+""" Check response
 """
-from flask import Flask, request
-from api.v1.auth.session_auth import SessionAuth
-from models.user import User
-
-""" Create a user test """
-user_email = "bobsession@hbtn.io"
-user_clear_pwd = "fake pwd"
-
-user = User()
-user.email = user_email
-user.password = user_clear_pwd
-user.save()
-
-""" Create a session ID """
-sa = SessionAuth()
-session_id = sa.create_session(user.id)
-print("User with ID: {} has a Session ID: {}".format(user.id, session_id))
-
-""" Create a Flask app """
-app = Flask(__name__)
-
-@app.route('/', methods=['GET'], strict_slashes=False)
-def root_path():
-    """ Root path
-    """
-    request_user = sa.current_user(request)
-    if request_user is None:
-        return "No user found\n"
-    return "User found: {}\n".format(request_user.id)
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port="5000")
+    try:
+        from api.v1.auth.session_exp_auth import SessionExpAuth
+        sea = SessionExpAuth()
+        user_id = "User1"
+        session_id = sea.create_session(user_id)
+        if session_id is None:
+            print("create_session should return a Session ID if user_id is valid")
+            exit(1)
+        
+        session_info = sea.user_id_by_session_id.get(session_id)
+        if session_info is None:
+            print("create_session should store information for the Session ID created")
+            exit(1)
+
+        if session_info.get('created_at') is None:
+            print("create_session should store the created_at for the Session ID created")
+            exit(1)
+        
+        print("OK", end="")
+    except:
+        import sys
+        print("Error: {}".format(sys.exc_info()))

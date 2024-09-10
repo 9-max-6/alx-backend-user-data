@@ -23,10 +23,8 @@ class SessionExpAuth(SessionAuth):
             return None
 
         SessionAuth.user_id_by_session_id[session_id] = {
-            "session dictionary": {
                 "user_id": user_id,
                 "created_at": datetime.now()
-            }
             }
 
         return session_id
@@ -39,9 +37,7 @@ class SessionExpAuth(SessionAuth):
             return None
         session_dictionary = SessionExpAuth.user_id_by_session_id.get(
                 session_id
-            ).get(
-                "session dictionary"
-            )
+        )
 
         if self.session_duration <= 0:
             return session_dictionary.get(
