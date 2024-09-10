@@ -34,6 +34,8 @@ class DB:
         """
         function to add a new user
         """
+        if not email or hashed_password:
+            return
         user_dict = {
             "email": email,
             "hashed_password": hashed_password
