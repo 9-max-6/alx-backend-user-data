@@ -1,10 +1,8 @@
 #!/usr/bin/env python3
 """Session expiration logic"""
-import uuid
 import os
 from datetime import datetime, timedelta
 from api.v1.auth.session_auth import SessionAuth
-from models.user import User
 
 
 class SessionExpAuth(SessionAuth):
