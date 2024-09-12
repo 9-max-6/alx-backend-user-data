@@ -66,7 +66,6 @@ class DB:
 
     def update_user(self, user_id: int, **kwargs) -> None:
         """a function to update a user"""
-    
         det = {
             "id": user_id
         }
