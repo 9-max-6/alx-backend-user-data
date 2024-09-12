@@ -75,3 +75,4 @@ class DB:
                 setattr(result, key, value)
             else:
                 raise ValueError()
+
