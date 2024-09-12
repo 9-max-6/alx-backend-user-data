@@ -29,7 +29,7 @@ class DB:
         if self.__session is None:
             DBSession = sessionmaker(bind=self._engine)
             self.__session = DBSession()
-        return self.__session
+        return self.__sessioncurl -XPOST localhost:5000/users -d 'email=bob@bob.com' -d 'password=mySuperPwd'
 
     def add_user(self, email: str, hashed_password: str) -> User:
         """
