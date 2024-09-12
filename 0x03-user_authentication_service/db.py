@@ -49,11 +49,11 @@ class DB:
         cols = []
         values = []
         for col, val in kwargs.items():
-            if col in User.__dict__.keys():
+            if hasattr(User, col):
                 cols.append(getattr(User, col))
                 values.append(val)
             else:
-                raise InvalidRequestError('Invalid')
+                raise InvalidRequestError()
 
         grouped_columns = tuple_(*cols)
         result = self._session.query(User).filter(
@@ -61,5 +61,5 @@ class DB:
         ).first()
 
         if not result:
-            raise NoResultFound('Not found')
+            raise NoResultFound()
         return result
