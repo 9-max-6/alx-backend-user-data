@@ -53,7 +53,7 @@ class Auth:
             update_dict = {
                 "session_id": session_id
             }
-            self._db.update_user(user.user_id, **update_dict)
+            self._db.update_user(user.id, **update_dict)
             return session_id
         except NoResultFound:
             """if the block that calls this function checks for a value
