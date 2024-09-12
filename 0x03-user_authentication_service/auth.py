@@ -61,6 +61,16 @@ class Auth:
             """
             return
 
+    def get_user_from_session_id(self, session_id: str) -> str:
+        """a function to get a user from a session id"""
+        if session_id is None:
+            return None
+        try:
+            user = self._db.find_user_by(session_id=session_id)
+            return user
+        except NoResultFound:
+            return None
+
 
 def _hash_password(password: str) -> str:
     """returns a hashed password"""
