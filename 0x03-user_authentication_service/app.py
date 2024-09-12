@@ -89,7 +89,7 @@ def profile() -> str:
     and the following JSON payload
     {"email": "<user email>"}
     """
-    session_id = request.cookie.get('session_id')
+    session_id = request.cookies.get('session_id')
     if not session_id:
         abort(403)
 
