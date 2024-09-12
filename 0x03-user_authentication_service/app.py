@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Flask app"""
-from flask import Flask, jsonify, request, abort
+from flask import Flask, jsonify, url_for, request, abort, redirect
 from auth import Auth
 
 AUTH = Auth()
@@ -10,7 +10,7 @@ app = Flask(__name__)
 
 
 @app.route('/', methods=["GET"])
-def hello() -> str:
+def home() -> str:
     """simple hello route"""
     return jsonify(
         {
@@ -55,6 +55,27 @@ def login() -> str:
     response.set_cookie("session_id", session_id)
 
     return response
+
+
+@app.route('/sessions', methods=['DELETE'])
+def logout() -> str:
+    """
+    Route: /sessions
+    Methods: 'DELETE'
+
+    Return:
+    Redirects user if the user exist
+    403 Status if Not
+    """
+    session_id = request.cookies.get('session_id')
+    if not session_id:
+        abort(403)
+    user = AUTH.get_user_from_session_id(session_id)
+    if not user:
+        abort(403)
+    AUTH.destroy_session(user.id)
+
+    return redirect(url_for('home'))
 
 
 if __name__ == "__main__":
