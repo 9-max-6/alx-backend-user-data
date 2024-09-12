@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""DB module
+"""Auth module
 """
 import bcrypt
 from db import DB
