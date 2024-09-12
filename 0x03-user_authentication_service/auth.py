@@ -78,4 +78,4 @@ def _generate_uuid() -> str:
     """a function to generate a uuid using the
     uuid module
     """
-    return uuid.uuid4()
+    return str(uuid.uuid4())
