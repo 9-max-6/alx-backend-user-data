@@ -1,11 +1,12 @@
 #!/usr/bin/env python3
 """DB module
 """
-from sqlalchemy import create_engine
-from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy import create_engine, tuple_
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.orm.session import Session
-from typing import TypeVar
+from sqlalchemy.exc import InvalidRequestError
+from sqlalchemy.orm.exc import NoResultFound
+from typing import TypeVar, Any
 from user import Base, User
 
 
@@ -30,7 +31,7 @@ class DB:
             self.__session = DBSession()
         return self.__session
 
-    def add_user(self, email: str, hashed_password: str) -> TypeVar(User):
+    def add_user(self, email: str, hashed_password: str) -> User:
         """
         function to add a new user
         """
@@ -42,3 +43,23 @@ class DB:
             self._session.rollback()
             user = None
         return user
+
+    def find_user_by(self, **kwargs: dict[str, Any]) -> User:
+        """A function to find a user using an attrbute"""
+        cols = []
+        values = []
+        for col, val in kwargs.items():
+            if col in User.__dict__.keys():
+                cols.append(getattr(User, col))
+                values.append(val)
+            else:
+                raise InvalidRequestError('Invalid')
+
+        grouped_columns = tuple_(*cols)
+        result = self._session.query(User).filter(
+            grouped_columns.in_([tuple(values)])
+        ).first()
+
+        if not result:
+            raise NoResultFound('Not found')
+        return result
