@@ -24,26 +24,26 @@ class Auth:
         new_user = self._db.add_user(email, _hash_password(password))
         if new_user:
             return new_user
-    
+
     def valid_login(self, email: str, password: str) -> bool:
         """A function to validate password"""
-        
+
         try:
             user = self._db.find_user_by(email=email)
-            if not bcrypt.checkpw(
-                password.encode('utf-8'),
-                user.hashed_password
-                ):
+            user_p = user.hashed_password
+            input_p_b = password.encode('utf-8')
+            if not bcrypt.checkpw(input_p_b, user_p):
                 return False
             return True
         except NoResultFound:
             return False
 
+
 def _hash_password(password: str) -> str:
     """returns a hashed password"""
     if not isinstance(password, str):
         return
-    return(
+    return (
         bcrypt.hashpw(
             password.encode('utf-8'),
             bcrypt.gensalt()
