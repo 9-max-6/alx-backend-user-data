@@ -44,7 +44,7 @@ class DB:
             user = None
         return user
 
-    def find_user_by(self, **kwargs: dict[str, Any]) -> User:
+    def find_user_by(self, **kwargs) -> User:
         """A function to find a user using an attrbute"""
         cols = []
         values = []
@@ -63,3 +63,16 @@ class DB:
         if not result:
             raise NoResultFound()
         return result
+
+    def update_user(self, user_id: int, **kwargs) -> None:
+        """a function to update a user"""
+    
+        det = {
+            "id": user_id
+        }
+        result = self.find_user_by(**det)
+        for key, value in kwargs.items():
+            if hasattr(User, key):
+                setattr(result, key, value)
+            else:
+                raise ValueError()
