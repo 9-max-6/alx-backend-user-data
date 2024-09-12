@@ -123,8 +123,6 @@ class Auth:
         except NoResultFound:
             raise ValueError()
 
-        
-
 
 def _hash_password(password: str) -> str:
     """returns a hashed password"""
